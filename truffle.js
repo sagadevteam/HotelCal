@@ -12,7 +12,26 @@
  *   },
  */
 
+var env = require("./env.js");
+var WalletProvider = require("truffle-wallet-provider");
+var Wallet = require('ethereumjs-wallet');
+var rinkebyPrivateKey = new Buffer(env.RINKEBY_PRIVATE_KEY, "hex");
+var rinkebyWallet = Wallet.fromPrivateKey(rinkebyPrivateKey);
+var rinkebyProvider = new WalletProvider(rinkebyWallet, env.RINKEBY_HTTP_PROVIDER);
+
+
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
+  networks: {
+    development: {
+      host: "localhost",
+      port: 8545,
+      network_id: "*" // Match any network id
+    },
+    rinkeby: {
+      provider: rinkebyProvider,
+      network_id: 4
+    },
+  }
 };

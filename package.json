@@ -1,0 +1,27 @@
+{
+  "name": "hotelcal",
+  "version": "1.0.0",
+  "description": "For SAGA",
+  "main": "env.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "ethereumjs-wallet": "^0.6.2",
+    "truffle-wallet-provider": "^0.0.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrianPHChen/HotelCal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BrianPHChen/HotelCal/issues"
+  },
+  "homepage": "https://github.com/BrianPHChen/HotelCal#readme"
+}
