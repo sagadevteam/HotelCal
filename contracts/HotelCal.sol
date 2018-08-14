@@ -38,13 +38,15 @@ contract HotelCal is
   function mint(
     address _to,
     uint256 _tokenId,
-    string _uri
+    string _uri,
+    uint256 _price
   )
     onlyOwner
     external
   {
     super._mint(_to, _tokenId);
     super._setTokenUri(_tokenId, _uri);
+    super._setTokenPrice(_tokenId, _price);
   }
 
   /**

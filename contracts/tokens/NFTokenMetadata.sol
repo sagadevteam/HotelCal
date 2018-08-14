@@ -27,6 +27,11 @@ contract NFTokenMetadata is
   mapping (uint256 => string) internal idToUri;
 
   /**
+   * @dev Mapping from NFT ID to its price.
+   */
+  mapping (uint256 => uint256) internal idToPrice;
+
+  /**
    * @dev Contract constructor.
    * @notice When implementing this contract don't forget to set nftName and nftSymbol.
    */
@@ -54,6 +59,7 @@ contract NFTokenMetadata is
 
     if (bytes(idToUri[_tokenId]).length != 0) {
       delete idToUri[_tokenId];
+      delete idToPrice[_tokenId];
     }
   }
 
@@ -73,6 +79,24 @@ contract NFTokenMetadata is
     internal
   {
     idToUri[_tokenId] = _uri;
+  }
+
+  /**
+   * @dev Set a price for a given NFT ID.
+   * @notice this is a internal function which should be called from user-implemented external
+   * function. Its purpose is to show and properly initialize data structures when using this
+   * implementation.
+   * @param _tokenId Id for which we want uri.
+   * @param _price Uint256 representing price.
+   */
+  function _setTokenPrice(
+    uint256 _tokenId,
+    uint256 _price
+  )
+    validNFToken(_tokenId)
+    internal
+  {
+    idToPrice[_tokenId] = _price;
   }
 
   /**
@@ -110,6 +134,21 @@ contract NFTokenMetadata is
     returns (string)
   {
     return idToUri[_tokenId];
+  }
+
+  /**
+   * @dev A distinct price for a given NFT.
+   * @param _tokenId Id for which we want price.
+   */
+  function tokenPrice(
+    uint256 _tokenId
+  )
+    validNFToken(_tokenId)
+    external
+    view
+    returns (uint256)
+  {
+    return idToPrice[_tokenId];
   }
 
 }
