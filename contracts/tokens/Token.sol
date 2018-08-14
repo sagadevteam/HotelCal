@@ -1,6 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "../utils/SafeMath.sol";
+import "../utils/Ownable.sol";
 import "./ERC20.sol";
 
 /**
@@ -8,7 +9,8 @@ import "./ERC20.sol";
  * @dev Standard ERC20 token. This contract follows the implementation at https://goo.gl/mLbAPJ.
  */
 contract Token is
-  ERC20
+  ERC20,
+  Ownable
 {
   using SafeMath for uint256;
 
@@ -58,6 +60,22 @@ contract Token is
     address indexed _owner,
     address indexed _spender,
     uint256 _value
+  );
+
+  /**
+   * @dev Trigger when erc721 mint a token, and then mint the equivalent value of erc20
+   */
+  event Mint(
+    address indexed _to,
+    uint256 _value
+  );
+
+  /**
+   * @dev Trigger when erc20 burned
+   */
+  event Burn(
+    address indexed _from,
+    uint256 value
   );
 
   /**
@@ -203,4 +221,46 @@ contract Token is
     _success = true;
   }
 
+  /**
+   * @dev Function to mint tokens
+   * @param _to The address that will receive the minted tokens.
+   * @param _value The amount of tokens to mint.
+   * @return A boolean that indicates if the operation was successful.
+   */
+  function mint(
+    address _to,
+    uint256 _value
+  )
+    public
+    onlyOwner
+    returns (bool _success)
+  {
+    tokenTotalSupply = tokenTotalSupply.add(_value);
+    balances[_to] = balances[_to].add(_value);
+    emit Mint(_to, _value);
+    emit Transfer(address(0), _to, _value);
+    _success = true;
+  }
+
+  /**
+   * @dev Burns a specific amount of tokens.
+   * @param _from The address that will burn the tokens.
+   * @param _value The amount of tokens to burn.
+   * @return A boolean that indicates if the operation was successful.
+   */
+  function burn(
+    address _from,
+    uint256 _value
+  )
+    public
+    onlyOwner
+    returns (bool _success)
+  {
+    require(_value <= balances[_from]);
+    tokenTotalSupply = tokenTotalSupply.sub(_value);
+    balances[_from] = balances[_from].sub(_value);
+    emit Burn(_from, _value);
+    emit Transfer(_from, address(0), _value);
+    _success = true;
+  }
 }
